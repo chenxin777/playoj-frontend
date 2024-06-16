@@ -1,8 +1,11 @@
 <template>
-  <div id="basicLayout">
+  <div id="userLayout">
     <a-layout style="min-height: 100vh">
       <a-layout-header class="header">
-        <GlobalHeader />
+        <a-space>
+          <img src="@/assets/logo.png" class="logo" alt="logo" />
+          <div class="title">玩 OJ</div>
+        </a-space>
       </a-layout-header>
       <a-layout-content class="content">
         <router-view />
@@ -15,19 +18,27 @@
 </template>
 
 <style scoped>
-#basicLayout .header {
-  margin-bottom: 16px;
-  box-shadow: #eee 1px 1px 5px;
+#userLayout {
+  text-align: center;
+  background: url("@/assets/bg.jpeg") 0% 0% / 100% 100%;
 }
 
-#basicLayout .content {
-  background: linear-gradient(to right, #fefefe, #fff);
+#userLayout .logo {
+  height: 48px;
+  margin: 5px;
+}
+
+#userLayout .header {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+#userLayout .content {
   margin-bottom: 16px;
   padding: 20px;
 }
 
-#basicLayout .footer {
-  background: #efefef;
+#userLayout .footer {
   padding: 16px;
   position: sticky;
   bottom: 0;
@@ -36,6 +47,4 @@
   text-align: center;
 }
 </style>
-<script setup lang="ts">
-import GlobalHeader from "@/components/GlobalHeader.vue";
-</script>
+<script setup lang="ts"></script>

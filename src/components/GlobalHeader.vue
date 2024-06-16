@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { routes } from "@/router/routes";
 import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import checkAccess from "@/access/checkAccess";
+import ACCESS_ENUM from "@/access/accessEnum";
 
 const router = useRouter();
 const route = useRoute();
@@ -28,13 +30,27 @@ const store = useStore();
 setTimeout(() => {
   store.dispatch("getLoginUser", {
     userName: "admin",
-    role: "admin",
+    userRole: ACCESS_ENUM.ADMIN,
   });
 }, 3000);
+
+const visibleRoutes = computed(() => {
+  return routes.filter((item, index) => {
+    if (item.meta?.hideInMenu) {
+      return false;
+    }
+    if (
+      !checkAccess(store.state.user.loginUser, item?.meta?.access as string)
+    ) {
+      return false;
+    }
+    return true;
+  });
+});
 </script>
 
 <template>
-  <a-row id="globalHeader" style="margin-bottom: 16px" align="center">
+  <a-row id="globalHeader" align="center" :wrap="false">
     <a-col flex="auto">
       <a-menu
         mode="horizontal"
@@ -51,13 +67,13 @@ setTimeout(() => {
             <div class="title">玩 OJ</div>
           </div>
         </a-menu-item>
-        <a-menu-item v-for="item in routes" :key="item.path">
+        <a-menu-item v-for="item in visibleRoutes" :key="item.path">
           {{ item.name }}
         </a-menu-item>
       </a-menu>
     </a-col>
     <a-col flex="100px">
-      <div>
+      <div style="text-align: center">
         {{ store.state.user?.loginUser?.userName ?? "未登录" }}
       </div>
     </a-col>
