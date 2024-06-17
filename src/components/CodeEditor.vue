@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import * as monaco from "monaco-editor";
-import { defineProps, onMounted, ref, toRaw, withDefaults } from "vue";
+import { defineProps, onMounted, ref, toRaw, watch, withDefaults } from "vue";
 
 interface Props {
   value: string;
+  language: string;
   handleChange: (v: string) => void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   value: () => "",
+  language: () => "java",
   handleChange: (v: string) => {
     console.log(v);
   },
@@ -17,20 +19,13 @@ const props = withDefaults(defineProps<Props>(), {
 const codeEditorRef = ref();
 const codeEditor = ref();
 
-const fillValue = () => {
-  if (!codeEditor.value) {
-    return;
-  }
-  // 改变值
-  toRaw(codeEditor.value).setValue("新的值");
-};
 onMounted(() => {
   if (!codeEditorRef.value) {
     return;
   }
   codeEditor.value = monaco.editor.create(codeEditorRef.value, {
     value: props.value,
-    language: "java",
+    language: props.language,
     automaticLayout: true,
     readOnly: false,
     minimap: {
@@ -43,12 +38,24 @@ onMounted(() => {
     props.handleChange(toRaw(codeEditor.value).getValue());
   });
 });
+
+watch(
+  () => props.language,
+  () => {
+    monaco.editor.setModelLanguage(
+      toRaw(codeEditor.value).getModel(),
+      props.language
+    );
+  }
+);
 </script>
 
 <template>
-  <div id="code-editor" ref="codeEditorRef" style="height: 400px">
-    <!--    <a-button @click="fillValue">填充值</a-button>-->
-  </div>
+  <div
+    id="code-editor"
+    ref="codeEditorRef"
+    style="min-height: 400px; height: 50vh"
+  ></div>
 </template>
 
 <style scoped></style>

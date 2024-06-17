@@ -1,4 +1,3 @@
-import WelcomeView from "@/views/WelcomeView.vue";
 import AboutView from "@/views/AboutView.vue";
 import NoAuth from "@/views/NoAuth.vue";
 import { RouteRecordRaw } from "vue-router";
@@ -8,6 +7,8 @@ import UserLoginView from "@/views/user/UserLoginView.vue";
 import UserLayout from "@/layouts/UserLayout.vue";
 import AddQuestionView from "@/views/question/AddQuestionView.vue";
 import ManageQuestionView from "@/views/question/ManageQuestionView.vue";
+import QuestionView from "@/views/question/QuestionView.vue";
+import ViewQuestionView from "@/views/question/ViewQuestionView.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +34,12 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "首页",
-    component: WelcomeView,
+    component: QuestionView,
+  },
+  {
+    path: "/question",
+    name: "题目浏览",
+    component: QuestionView,
   },
   {
     path: "/add/question",
@@ -47,6 +53,16 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/update/question",
     name: "更新题目",
     component: AddQuestionView,
+    meta: {
+      access: ACCESS_ENUM.USER,
+      hideInMenu: true,
+    },
+  },
+  {
+    path: "/view/question/:id",
+    name: "答题页",
+    component: ViewQuestionView,
+    props: true,
     meta: {
       access: ACCESS_ENUM.USER,
       hideInMenu: true,

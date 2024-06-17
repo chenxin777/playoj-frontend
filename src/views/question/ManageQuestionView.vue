@@ -63,13 +63,16 @@ const handlePageChange = (page) => {
     ...searchParams.value,
     current: page,
   };
+  loadData();
 };
 
 const handlePageSizeChange = (pageSize) => {
   searchParams.value = {
     ...searchParams.value,
+    current: 1,
     pageSize: pageSize,
   };
+  loadData();
 };
 
 const doDelete = async (question: Question) => {
@@ -98,10 +101,6 @@ onMounted(() => {
   loadData();
 });
 
-watchEffect(() => {
-  loadData();
-});
-
 const columns = ref([
   {
     title: "id",
@@ -121,7 +120,7 @@ const columns = ref([
   },
   {
     title: "标签",
-    dataIndex: "answer",
+    dataIndex: "tags",
   },
   {
     title: "判题配置",
