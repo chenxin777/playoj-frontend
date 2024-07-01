@@ -10,7 +10,7 @@ export type QuestionVO = {
     content?: string;
     favourNum?: number;
     id?: number;
-    judgeConfig?: Array<JudgeConfig>;
+    judgeConfig?: JudgeConfig;
     submitNum?: number;
     tags?: Array<string>;
     thumbNum?: number;

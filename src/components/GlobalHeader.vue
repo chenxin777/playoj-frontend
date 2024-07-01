@@ -64,7 +64,7 @@ const visibleRoutes = computed(() => {
         >
           <div class="title-bar">
             <img class="logo" src="../assets/logo.png" alt="logo" />
-            <div class="title">玩 OJ</div>
+            <div class="title">Play OJ</div>
           </div>
         </a-menu-item>
         <a-menu-item v-for="item in visibleRoutes" :key="item.path">

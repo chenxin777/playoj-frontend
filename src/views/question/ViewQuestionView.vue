@@ -73,15 +73,15 @@
 
 <script setup lang="ts">
 import { defineProps, onMounted, ref, withDefaults } from "vue";
+
+import message from "@arco-design/web-vue/es/message";
+import MdView from "@/components/MdView.vue";
+import CodeEditor from "@/components/CodeEditor.vue";
 import {
   QuestionControllerService,
   QuestionVO,
   UserQuestionAddRequest,
-  UserQuestionControllerService,
 } from "../../../generated";
-import message from "@arco-design/web-vue/es/message";
-import MdView from "@/components/MdView.vue";
-import CodeEditor from "@/components/CodeEditor.vue";
 
 interface Props {
   id: string;
@@ -120,7 +120,7 @@ const doSubmit = async () => {
   if (!question.value?.id) {
     return;
   }
-  const res = await UserQuestionControllerService.doUserQuestionUsingPost({
+  const res = await QuestionControllerService.doUserQuestionUsingPost({
     ...form.value,
     questionId: question.value.id as any,
   });

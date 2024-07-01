@@ -42,10 +42,12 @@ onMounted(() => {
 watch(
   () => props.language,
   () => {
-    monaco.editor.setModelLanguage(
-      toRaw(codeEditor.value).getModel(),
-      props.language
-    );
+    if (codeEditor.value) {
+      monaco.editor.setModelLanguage(
+        toRaw(codeEditor.value).getModel(),
+        props.language
+      );
+    }
   }
 );
 </script>

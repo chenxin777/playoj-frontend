@@ -6,13 +6,16 @@ import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
 import type { BaseResponse_Page_Question_ } from '../models/BaseResponse_Page_Question_';
 import type { BaseResponse_Page_QuestionVO_ } from '../models/BaseResponse_Page_QuestionVO_';
+import type { BaseResponse_Page_UserQuestionVO_ } from '../models/BaseResponse_Page_UserQuestionVO_';
 import type { BaseResponse_Question_ } from '../models/BaseResponse_Question_';
 import type { BaseResponse_QuestionVO_ } from '../models/BaseResponse_QuestionVO_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QuestionAddRequest } from '../models/QuestionAddRequest';
 import type { QuestionEditRequest } from '../models/QuestionEditRequest';
 import type { QuestionQueryRequest } from '../models/QuestionQueryRequest';
+import type { QuestionSubmitQueryRequest } from '../models/QuestionSubmitQueryRequest';
 import type { QuestionUpdateRequest } from '../models/QuestionUpdateRequest';
+import type { UserQuestionAddRequest } from '../models/UserQuestionAddRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -188,6 +191,27 @@ export class QuestionControllerService {
         });
     }
     /**
+     * listMyQuestionSubmitByPage
+     * @param questionSubmitQueryRequest questionSubmitQueryRequest
+     * @returns BaseResponse_Page_UserQuestionVO_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static listMyQuestionSubmitByPageUsingPost(
+        questionSubmitQueryRequest: QuestionSubmitQueryRequest,
+    ): CancelablePromise<BaseResponse_Page_UserQuestionVO_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/my/user_question/list/page',
+            body: questionSubmitQueryRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
      * updateQuestion
      * @param questionUpdateRequest questionUpdateRequest
      * @returns BaseResponse_boolean_ OK
@@ -201,6 +225,48 @@ export class QuestionControllerService {
             method: 'POST',
             url: '/api/question/update',
             body: questionUpdateRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * doUserQuestion
+     * @param userQuestionAddRequest userQuestionAddRequest
+     * @returns BaseResponse_long_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static doUserQuestionUsingPost(
+        userQuestionAddRequest: UserQuestionAddRequest,
+    ): CancelablePromise<BaseResponse_long_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/user_question/do',
+            body: userQuestionAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * listQuestionSubmitByPage
+     * @param questionSubmitQueryRequest questionSubmitQueryRequest
+     * @returns BaseResponse_Page_UserQuestionVO_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static listQuestionSubmitByPageUsingPost(
+        questionSubmitQueryRequest: QuestionSubmitQueryRequest,
+    ): CancelablePromise<BaseResponse_Page_UserQuestionVO_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/user_question/list/page',
+            body: questionSubmitQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

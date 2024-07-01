@@ -1,20 +1,28 @@
 <template>
-  <div id="questionView">
+  <div id="myQuestionSubmitView">
     <a-form :model="searchParams" layout="inline">
-      <a-form-item field="title" label="题目">
+      <a-form-item field="title" label="题号">
         <a-input
-          v-model="searchParams.title"
-          placeholder="请输入题目"
+          v-model="searchParams.questionId"
+          placeholder="请输入题号"
         ></a-input>
       </a-form-item>
-      <a-form-item field="tags" label="标签" style="min-width: 240px">
-        <a-input-tag
-          v-model="searchParams.tags"
-          placeholder="请输入标签"
-        ></a-input-tag>
+      <a-form-item label="编程语言">
+        <a-select
+          v-model="searchParams.language"
+          :style="{ width: '200px' }"
+          placeholder="选择编程语言"
+        >
+          <a-option
+            v-for="item of languageList"
+            :value="item"
+            :label="item"
+            :key="item"
+          />
+        </a-select>
       </a-form-item>
       <a-form-item>
-        <a-button type="primary" @click="doQuery">提交</a-button>
+        <a-button type="primary" @click="doQuery">搜索</a-button>
       </a-form-item>
     </a-form>
     <a-divider size="0" />
@@ -32,26 +40,11 @@
       @page-change="handlePageChange"
       @page-size-change="handlePageSizeChange"
     >
-      <template #optional="{ record }">
-        <a-space direction="horizontal">
-          <a-button type="primary" @click="doQuestion(record)">去答题</a-button>
-        </a-space>
+      <template #status="{ record }">
+        {{ handleStatus(record.status) }}
       </template>
-      <template #tags="{ record }">
-        <a-space>
-          <a-tag v-for="(tag, index) of record.tags" :key="index" color="green">
-            {{ tag }}
-          </a-tag>
-        </a-space>
-      </template>
-      <template #acceptedRate="{ record }">
-        {{
-          `${
-            record.submitNum
-              ? ((record.acceptNum / record.submitNum) * 100).toFixed(2)
-              : "0"
-          }% (${record.acceptNum}/${record.submitNum})`
-        }}
+      <template #judgeInfo="{ record }">
+        {{ JSON.stringify(record.judgeInfo) }}
       </template>
       <template #createTime="{ record }">
         {{ dayjs(record.createTime).format("YYYY-MM-DD") }}
@@ -61,19 +54,28 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import {
   Question,
   QuestionControllerService,
-  QuestionQueryRequest,
+  QuestionSubmitQueryRequest,
 } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 
-const searchParams = ref<QuestionQueryRequest>({
-  title: "",
-  tags: [],
+const languageList = ["java", "cpp", "python", "html"];
+
+const statusList = [
+  { code: 0, text: "待判题" },
+  { code: 1, text: "判题中" },
+  { code: 2, text: "成功" },
+  { code: 3, text: "失败" },
+];
+
+const searchParams = ref<QuestionSubmitQueryRequest>({
+  questionId: undefined,
+  language: undefined,
   pageSize: 10,
   current: 1,
 });
@@ -82,10 +84,22 @@ const total = ref(0);
 const tableRef = ref();
 const router = useRouter();
 
+const handleStatus = (code: number) => {
+  for (let i = 0; i < statusList.length; i++) {
+    if (code === statusList[i].code) {
+      return statusList[i].text;
+    }
+  }
+  return "异常";
+};
+
 const loadData = async () => {
-  const res = await QuestionControllerService.listQuestionVoByPageUsingPost(
-    searchParams.value
-  );
+  const res =
+    await QuestionControllerService.listMyQuestionSubmitByPageUsingPost({
+      ...searchParams.value,
+      sortField: "createTime",
+      sortOrder: "descend",
+    });
   if (res.code === 0) {
     dataList.value = res.data.records;
     total.value = res.data.total;
@@ -111,12 +125,6 @@ const handlePageSizeChange = (pageSize: any) => {
   loadData();
 };
 
-const doQuestion = (question: Question) => {
-  router.push({
-    path: `/view/question/${question.id}`,
-  });
-};
-
 const doQuery = () => {
   // 重置页号
   searchParams.value = {
@@ -126,34 +134,40 @@ const doQuery = () => {
   loadData();
 };
 
+let timer: any = null;
+
 onMounted(() => {
-  loadData();
+  if (timer == null) {
+    loadData();
+  }
+  timer = setInterval(loadData, 30000);
+});
+onUnmounted(() => {
+  if (timer) {
+    clearInterval(timer);
+  }
 });
 
 const columns = ref([
   {
-    title: "题号",
-    dataIndex: "id",
+    title: "题目id",
+    dataIndex: "questionId",
   },
   {
-    title: "标题",
-    dataIndex: "title",
+    title: "编程语言",
+    dataIndex: "language",
   },
   {
-    title: "标签",
-    slotName: "tags",
+    title: "判题信息",
+    slotName: "judgeInfo",
   },
   {
-    title: "通过率",
-    slotName: "acceptedRate",
+    title: "判题状态",
+    slotName: "status",
   },
   {
     title: "创建时间",
     slotName: "createTime",
-  },
-  {
-    title: "Optional",
-    slotName: "optional",
   },
 ]);
 
@@ -161,7 +175,7 @@ const dataList = ref<Question[]>([]);
 </script>
 
 <style scoped>
-#questionView {
+#myQuestionSubmitView {
   max-width: 1280px;
   margin: 0 auto;
 }

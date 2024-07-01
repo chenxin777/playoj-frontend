@@ -4,7 +4,7 @@
       <a-layout-header class="header">
         <a-space>
           <img src="@/assets/logo.png" class="logo" alt="logo" />
-          <div class="title">玩 OJ</div>
+          <div class="title">Play OJ</div>
         </a-space>
       </a-layout-header>
       <a-layout-content class="content">

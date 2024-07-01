@@ -1,4 +1,3 @@
-import AboutView from "@/views/AboutView.vue";
 import NoAuth from "@/views/NoAuth.vue";
 import { RouteRecordRaw } from "vue-router";
 import ACCESS_ENUM from "@/access/accessEnum";
@@ -8,7 +7,9 @@ import UserLayout from "@/layouts/UserLayout.vue";
 import AddQuestionView from "@/views/question/AddQuestionView.vue";
 import ManageQuestionView from "@/views/question/ManageQuestionView.vue";
 import QuestionView from "@/views/question/QuestionView.vue";
+import QuestionSubmitView from "@/views/question/QuestionSubmitView.vue";
 import ViewQuestionView from "@/views/question/ViewQuestionView.vue";
+import MyQuestionSubmitView from "@/views/question/MyQuestionSubmitView.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -37,9 +38,12 @@ export const routes: Array<RouteRecordRaw> = [
     component: QuestionView,
   },
   {
-    path: "/question",
-    name: "题目浏览",
-    component: QuestionView,
+    path: "/question_submit",
+    name: "题目提交",
+    component: QuestionSubmitView,
+    meta: {
+      access: ACCESS_ENUM.USER,
+    },
   },
   {
     path: "/add/question",
@@ -77,9 +81,9 @@ export const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/about",
-    name: "我的空间",
-    component: AboutView,
+    path: "/question_submit/my",
+    name: "我的提交",
+    component: MyQuestionSubmitView,
     meta: {
       access: ACCESS_ENUM.USER,
     },
