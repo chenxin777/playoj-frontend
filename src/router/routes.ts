@@ -42,7 +42,7 @@ export const routes: Array<RouteRecordRaw> = [
     name: "题目提交",
     component: QuestionSubmitView,
     meta: {
-      access: ACCESS_ENUM.USER,
+      access: ACCESS_ENUM.ADMIN,
     },
   },
   {

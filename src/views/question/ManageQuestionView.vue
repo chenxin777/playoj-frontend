@@ -58,7 +58,7 @@ const loadData = async () => {
   }
 };
 
-const handlePageChange = (page) => {
+const handlePageChange = (page: any) => {
   searchParams.value = {
     ...searchParams.value,
     current: page,
@@ -66,7 +66,7 @@ const handlePageChange = (page) => {
   loadData();
 };
 
-const handlePageSizeChange = (pageSize) => {
+const handlePageSizeChange = (pageSize: any) => {
   searchParams.value = {
     ...searchParams.value,
     current: 1,

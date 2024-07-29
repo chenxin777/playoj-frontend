@@ -23,6 +23,7 @@
       :columns="columns"
       :data="dataList"
       :pagination="{
+        pageSizeOptions: [10, 20],
         pageSize: searchParams.pageSize,
         current: searchParams.current,
         total: total,
@@ -134,26 +135,32 @@ const columns = ref([
   {
     title: "题号",
     dataIndex: "id",
+    align: "center",
   },
   {
     title: "标题",
     dataIndex: "title",
+    align: "center",
   },
   {
     title: "标签",
     slotName: "tags",
+    align: "center",
   },
   {
     title: "通过率",
     slotName: "acceptedRate",
+    align: "center",
   },
   {
     title: "创建时间",
     slotName: "createTime",
+    align: "center",
   },
   {
-    title: "Optional",
+    title: "操作",
     slotName: "optional",
+    align: "center",
   },
 ]);
 

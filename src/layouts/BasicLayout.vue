@@ -9,6 +9,10 @@
       </a-layout-content>
       <a-layout-footer class="footer">
         <a href="https://github.com/chenxin777" target="_blank">玩物志出品</a>
+        <a-divider direction="vertical" />
+        <a href="https://beian.miit.gov.cn" target="_blank"
+          >晋ICP备2024043463号-1</a
+        >
       </a-layout-footer>
     </a-layout>
   </div>
